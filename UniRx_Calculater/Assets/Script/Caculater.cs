@@ -15,22 +15,10 @@ public class Caculater : MonoBehaviour
     private string displayText;
 
     private Subject<string> sendCalculateSubject = new Subject<string>();
+
     public IObservable<string> CalculateResult
     {
         get { return sendCalculateSubject; }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void Awake()
@@ -64,15 +52,11 @@ public class Caculater : MonoBehaviour
                 //×
                 if (operationSymbol == 2) calculatedValue *= double.Parse(displayText);
                 //÷
-                if (operationSymbol == 3) calculatedValue /= double.Parse(displayText);
+                if (operationSymbol == 3) 
+                    if(double.Parse(displayText) == 0 )calculatedValue = 0;
+                    else calculatedValue /= double.Parse(displayText);
                 //=
                 if (operationSymbol == 4) calculatedValue = double.Parse(displayText);
-                ////+-
-                //if (operationSymbol == 7)
-                //{
-                //    calculatedValue = double.Parse(displayText);
-                //    calculatedValue *= -1;
-                //}
                 //今回入力された演算記号を格納
                 operationSymbol = newOperationSymbol;
 
@@ -83,7 +67,6 @@ public class Caculater : MonoBehaviour
                     operationSymbol = null;
                 }
                 //showdisplayに計算結果を送信する
-                Debug.Log(calculatedValue.ToString());
                 sendCalculateSubject.OnNext(calculatedValue.ToString());
             }
             else
